@@ -1,0 +1,14 @@
+#aside-bar1{
+    position: relative;
+    top: 10px;
+}
+
+#aside-bar2{
+    position: relative;
+    top: 20px;
+}
+
+#container{
+    margin: auto;
+    font-weight: bold;
+}
