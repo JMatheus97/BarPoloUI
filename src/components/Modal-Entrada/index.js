@@ -5,13 +5,15 @@ export default function Modal() {
     const [quantidade, setQuantidade] = useState(0);
     const [validade, setValidade] = useState('');
     const [unidadeMedida, setUnidadeMedida] = useState('');
+    const [preco, setPreco] = useState('0')
 
-    function save(){
+    function save() {
         var estoque = {
             codigo,
             quantidade,
             validade,
-            unidadeMedida
+            unidadeMedida,
+            preco
         }
         console.log(estoque);
     }
@@ -33,15 +35,23 @@ export default function Modal() {
                                     </div>
                                     <div className="col-lg-3">
                                         <label htmlFor="codigo-barras" className="form-label">Quantidade</label>
-                                        <input type="number" className="form-control" value={quantidade} onChange={(e) => setQuantidade(e.target.value)} />
+                                        <input type="number" className="form-control" value={quantidade} onChange={(e) => setQuantidade(parseFloat(e.target.value))} />
                                     </div>
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-5">
                                         <label htmlFor="codigo-barras" className="form-label">Validade</label>
-                                        <input type="date" className="form-control" value={validade} onChange={(e) => setValidade(e.target.value)}/>
+                                        <input type="date" className="form-control" value={validade} onChange={(e) => setValidade(e.target.value)} />
                                     </div>
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-4">
                                         <label htmlFor="codigo-barras" className="form-label">Unidade de Medida</label>
-                                        <input className="form-control" value={unidadeMedida} onChange={(e) => setUnidadeMedida(e.target.value)}/>
+                                        <select className="form-control" value={unidadeMedida} onChange={(e) => setUnidadeMedida(e.target.value)}>
+                                            <option selected>...</option>
+                                            <option value="Un" selected>Unidade</option>
+                                            <option value="Gr">Grama</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-lg-3">
+                                        <label htmlFor="codigo-barras" className="form-label">Preço</label>
+                                        <input type="number" className="form-control" value={preco} onChange={(e) => setPreco(parseFloat(e.target.value))} />
                                     </div>
                                 </div>
                             </div>

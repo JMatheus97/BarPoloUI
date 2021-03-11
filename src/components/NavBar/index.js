@@ -14,6 +14,9 @@ export default function NavBar() {
               <li className="nav-item dropdown">
                 <a className="nav-link" href="/#"> Estoque</a>
               </li>
+              <li className="nav-item dropdown">
+                <a className="nav-link" href="/#">Mesas</a>
+              </li>
             </ul>
           </div>
         </div>
