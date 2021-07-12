@@ -5,7 +5,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import './styles.css';
 
 
-import { history } from '../../routes';
+import { history, Authentication } from '../../index';
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -16,6 +16,7 @@ export default function Login() {
         if (username && password) {
             AuthenticationStore.login(username, password)
                 .then(() => {
+                    Authentication = AuthenticationStore.isAuthenticated;
                     if (AuthenticationStore.isAuthenticated === true) {
                         history.push('/app');
                         document.location.reload(true);
@@ -27,7 +28,7 @@ export default function Login() {
                     setMessage('Usuário ou senha inválidos!');
                     console.log(message);
                 });
-        } else if (username || password === '') {
+        } else if (username === '' || password === '') {
             setMessage('Usuário ou senha inválidos!');
         }
     };

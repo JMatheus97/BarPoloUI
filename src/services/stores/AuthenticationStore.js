@@ -3,7 +3,7 @@ import i_ from "i18next";
 
 
 import { get, form, post, jsonParser } from "../utils/Cliente";
-import {history} from '../../routes';
+import {history} from '../../index';
 
 class AuthenticationStore {
   constructor() {
@@ -41,9 +41,8 @@ class AuthenticationStore {
               this.user = {};
               return Promise.reject(i_.t("errors.bad-credentials"));
             } else {
-              this.isAuthenticated = true;
-              history.push("app");
-              return res.json();
+              return  this.isAuthenticated = true;
+              
             }
           })
           .then(data => {

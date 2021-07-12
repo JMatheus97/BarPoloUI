@@ -12,10 +12,10 @@ export default function NavBar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item dropdown">
-                <a className="nav-link" href="/#"> Estoque</a>
+                <a className="nav-link" href="/app"> Estoque</a>
               </li>
               <li className="nav-item dropdown">
-                <a className="nav-link" href="/#">Mesas</a>
+                <a className="nav-link" href="/mesa">Mesas</a>
               </li>
             </ul>
           </div>
