@@ -8,7 +8,6 @@ export const getProducts = async () => {
     .catch((erro) => {
       toast.error(erro.data.message);
     });
-  console.log(response.data);
   if (response === undefined) return;
   // eslint-disable-next-line consistent-return
   return response.data;

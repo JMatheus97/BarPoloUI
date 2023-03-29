@@ -29,13 +29,20 @@ export default function Product() {
   }, []);
 
   const save = async () => {
+    if (nome === '') {
+      toast.error('O campo nome é obragitorio');
+      return;
+    }
+
     await axios
       .post('/product/new', { nome, valor })
       .then(() => {
         toast.success('Salvo com sucesso !');
       })
-      .catch(() => {
-        toast.error('Não foi possível salvar ! ');
+      .catch((error) => {
+        toast.error(error.response.data.message);
+        // eslint-disable-next-line no-useless-return
+        return;
       });
 
     listProducts();
@@ -52,17 +59,17 @@ export default function Product() {
             <Row className="m-3">
               <Form.Group as={Col} md="4" controlId="validationCustom01">
                 <Form.Label>Produto</Form.Label>
-                <Form.Control required type="text" placeholder="Nome do Produto" value={nome} onChange={(e) => setNome(e.target.value)} />
+                <Form.Control type="text" placeholder="Nome do Produto" value={nome} onChange={(e) => setNome(e.target.value)} />
               </Form.Group>
               <Form.Group as={Col} md="2">
                 <Form.Label>Valor</Form.Label>
-                <Form.Control required type="number" value={valor} onChange={(e) => setValor(parseFloat(e.target.value))} />
+                <Form.Control type="number" value={valor} onChange={(e) => setValor(parseFloat(e.target.value))} />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="m-3">
               <Form.Group as={Col} md="4">
-                <Button className="button-save" type="submit" onClick={save}>
+                <Button className="button-save" type="button" onClick={save}>
                   Salvar
                 </Button>
               </Form.Group>
@@ -81,7 +88,8 @@ export default function Product() {
               </thead>
               <tbody>
                 {products.map((p) => (
-                  <tr key={p.id}>
+                  // eslint-disable-next-line no-underscore-dangle
+                  <tr key={p._id}>
                     <td>{p.nome}</td>
                     <td>{p.valor}</td>
                     <td>
