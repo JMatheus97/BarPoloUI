@@ -1,10 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Table from 'react-bootstrap/Table';
 import { toast } from 'react-toastify';
+import { CiEdit } from 'react-icons/ci';
+import { TiDeleteOutline } from 'react-icons/ti';
+import NavBar from '../../components/NavBar';
+import { getProducts } from './module';
 import axios from '../../services/axios';
 
-export default function Modal() {
+import './styles.css';
+
+export default function Product() {
   const [nome, setNome] = useState('');
   const [valor, setValor] = useState(0);
+  const [products, setProducts] = useState([]);
+
+  const listProducts = async () => {
+    const resultProducts = await getProducts();
+    setProducts(resultProducts);
+  };
+
+  useEffect(() => {
+    listProducts();
+  }, []);
 
   const save = async () => {
     await axios
@@ -15,55 +37,66 @@ export default function Modal() {
       .catch(() => {
         toast.error('Não foi possível salvar ! ');
       });
+
+    listProducts();
   };
   return (
-    <div>
-      <div
-        className="modal fade"
-        id="product"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabIndex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="staticBackdropLabel">
-                Cadastro de Produto
-              </h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <form>
-              <div className="modal-body">
-                <div className="row g-3">
-                  <div className="col-lg-9">
-                    <label htmlFor="codigo-barras" className="form-label">
-                      Nome do Produto
-                    </label>
-                    <input type="text" className="form-control" value={nome} onChange={(e) => setNome(e.target.value)} />
-                  </div>
-                  <div className="col-lg-3">
-                    <label htmlFor="codigo-barras" className="form-label">
-                      Valor
-                    </label>
-                    <input type="number" className="form-control" value={valor} onChange={(e) => setValor(parseFloat(e.target.value))} />
-                  </div>
-                </div>
-              </div>
-            </form>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                Fechar
-              </button>
-              <button type="button" className="btn btn-primary" onClick={save}>
-                Salvar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <NavBar />
+      <Card className="m-5">
+        <Card.Header as="h5" className="text-center">
+          Cadastro de Produtos
+        </Card.Header>
+        <Card.Body>
+          <Form>
+            <Row className="m-3">
+              <Form.Group as={Col} md="4" controlId="validationCustom01">
+                <Form.Label>Produto</Form.Label>
+                <Form.Control required type="text" placeholder="Nome do Produto" value={nome} onChange={(e) => setNome(e.target.value)} />
+              </Form.Group>
+              <Form.Group as={Col} md="2">
+                <Form.Label>Valor</Form.Label>
+                <Form.Control required type="number" value={valor} onChange={(e) => setValor(parseFloat(e.target.value))} />
+                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+              </Form.Group>
+            </Row>
+            <Row className="m-3">
+              <Form.Group as={Col} md="4">
+                <Button className="button-save" type="submit" onClick={save}>
+                  Salvar
+                </Button>
+              </Form.Group>
+            </Row>
+          </Form>
+
+          <Row className="m-3">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Valor</th>
+                  <th>Editar</th>
+                  <th>Deletar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((p) => (
+                  <tr key={p.id}>
+                    <td>{p.nome}</td>
+                    <td>{p.valor}</td>
+                    <td>
+                      <CiEdit className="icon-edit" size={23} />
+                    </td>
+                    <td>
+                      <TiDeleteOutline className="icon-delete" size={23} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Row>
+        </Card.Body>
+      </Card>
+    </>
   );
 }

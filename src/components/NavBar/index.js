@@ -1,57 +1,33 @@
-import React from 'react';
-import Stock from '../../page/Stock';
-import Product from '../../page/Product';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import { Link } from 'react-router-dom';
 
-export default function NavBar() {
+function BasicExample() {
   return (
-    <>
-      {' '}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/#">
-            BarPolo
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon" />
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Cadastro
-                </a>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" data-bs-toggle="modal" href="#product">
-                      Produto
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" data-bs-toggle="modal" href="#entrada">
-                      Estoque
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Mesa
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      <Stock />
-      <Product />
-    </>
+    <Navbar bg="black" variant="dark">
+      <Container>
+        <Navbar.Brand href="/">BarPolo</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <NavDropdown title="Cadastro" id="basic-nav-dropdown">
+              <NavDropdown.Item as={Link} to="/product">
+                Cadastro
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/stock">
+                Estoque
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/mesa">
+                Mesa
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
+
+export default BasicExample;
