@@ -15,8 +15,8 @@ export default function Routes() {
     <Switch>
       <MyRoute excat path="/login" component={Login} />
       <MyRoute excat path="/product" component={Product} isClosed />
+      <MyRoute exact path="/stock" component={Stock} isClosed />
       <MyRoute excat path="/" component={Home} isClosed />
-      <MyRoute exact path="/app" component={Stock} isClosed />
       <MyRoute exact path="/mesa" component={Mesa} isClosed />
       <MyRoute exact path="/comanda-mesa" component={Comandas} isClosed />
       <MyRoute path="*" component={Page404} isClosed />

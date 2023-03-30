@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { CiEdit } from 'react-icons/ci';
 import { TiDeleteOutline } from 'react-icons/ti';
 import NavBar from '../../components/NavBar';
-import { getProducts } from './module';
+import { getProducts } from '../../helpers/request-get-global';
 import axios from '../../services/axios';
 
 import './styles.css';
