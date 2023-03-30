@@ -19,6 +19,10 @@ export default createGlobalStyle`
 
   html, body, #root {
     height: 100%;
+
+    #label-logout{
+      cursor: pointer;
+    }
   }
 
   button {

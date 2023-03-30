@@ -3,8 +3,14 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import * as actions from '../../store/modules/auth/action';
 
 function BasicExample() {
+  const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(actions.loginFailure());
+  };
   return (
     <Navbar bg="black" variant="dark">
       <Container>
@@ -22,8 +28,16 @@ function BasicExample() {
               <NavDropdown.Item as={Link} to="/mesa">
                 Mesa
               </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/mesa">
+                Funcionário
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
+          <Navbar.Collapse className="justify-content-end">
+            <Navbar.Text id="label-logout" as={Link} to="/login" onClick={() => logout()}>
+              Sair
+            </Navbar.Text>
+          </Navbar.Collapse>
         </Navbar.Collapse>
       </Container>
     </Navbar>
