@@ -1,46 +1,36 @@
 import React from 'react';
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import NavBar from '../../components/NavBar/index';
+import TableWithPerson from '../../components/TableWithPerson';
 
 export default function PageEstoque() {
   return (
-    <div>
-      <header>
-        <NavBar />
-      </header>
-      <main>
-        <div className="container-fluid mt-3">
-          <div className="row">
-            <div className="col-lg-2 m-1 mb-3">
-              <div id="aside-bar1" className="card card text-center">
-                <div className="card-header">Entrada Produto</div>
-                <div className="card-body">
-                  <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#entrada">
-                    Entrada
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-9 m-sm-1">
-              <div className="card">
-                <div className="card-header"> </div>
-                <div className="card-body" />
-              </div>
-            </div>
-          </div>
-          <div id="aside-bar2" className="row">
-            <div className="col-lg-2 m-1">
-              <div className="card card text-center">
-                <div className="card-header">Saída Produto</div>
-                <div className="card-body">
-                  <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#saida">
-                    Saída
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+    <>
+      <NavBar />
+      <Row className="m-1 mt-3">
+        <Col xs={6}>
+          <Card>
+            <Card.Header as="h5" className="text-center">
+              Lista de Mesas
+            </Card.Header>
+            <Card.Body className="text-center">
+              <Row>
+                <TableWithPerson />
+              </Row>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col xs={6}>
+          <Card>
+            <Card.Header as="h5" className="text-center">
+              Lista de Comandas
+            </Card.Header>
+            <Card.Body />
+          </Card>
+        </Col>
+      </Row>
+    </>
   );
 }
