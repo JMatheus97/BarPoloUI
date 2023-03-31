@@ -1,0 +1,20 @@
+.icon-delete {
+  color: #ff0022;
+  cursor: pointer;
+}
+
+.icon-edit {
+  color: #00487c;
+  cursor: pointer;
+}
+
+
+  .button-save {
+    cursor: pointer;
+    font-size:small;
+    border: none;
+    color: #fff;
+    border-radius: 25px;
+    font-weight: 700;
+
+  }

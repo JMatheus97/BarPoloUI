@@ -26,3 +26,15 @@ export const getStocks = async () => {
   // eslint-disable-next-line consistent-return
   return response.data;
 };
+
+export const getTables = async () => {
+  const response = await axios
+    .get('table/')
+    .then((data) => data)
+    .catch((erro) => {
+      toast.error(erro.data.message);
+    });
+  if (response === undefined) return;
+  // eslint-disable-next-line consistent-return
+  return response.data;
+};

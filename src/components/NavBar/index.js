@@ -25,7 +25,7 @@ function BasicExample() {
               <NavDropdown.Item as={Link} to="/stock">
                 Estoque
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/mesa">
+              <NavDropdown.Item as={Link} to="/table">
                 Mesa
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/mesa">
