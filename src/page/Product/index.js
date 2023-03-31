@@ -64,7 +64,6 @@ export default function Product() {
               <Form.Group as={Col} md="2">
                 <Form.Label>Valor</Form.Label>
                 <Form.Control type="number" value={valor} onChange={(e) => setValor(parseFloat(e.target.value))} />
-                <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
             </Row>
             <Row className="m-3">
