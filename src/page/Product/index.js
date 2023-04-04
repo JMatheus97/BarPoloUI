@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
@@ -18,6 +19,8 @@ export default function Product() {
   const [nome, setNome] = useState('');
   const [valor, setValor] = useState(0);
   const [products, setProducts] = useState([]);
+  const [selector, setSelector] = useState(false);
+  const [id, setId] = useState('');
 
   const listProducts = async () => {
     const resultProducts = await getProducts();
@@ -28,16 +31,61 @@ export default function Product() {
     listProducts();
   }, []);
 
+  const clear = () => {
+    setNome('');
+    setValor(0);
+  };
+
+  const edit = (index) => {
+    const product = { ...products };
+
+    if (product.length === 0) return;
+
+    setSelector(true);
+    setId(product[index]._id);
+    setNome(product[index].nome);
+    setValor(product[index].valor);
+  };
+
   const save = async () => {
-    if (nome === '') {
-      toast.error('O campo nome é obragitorio');
-      return;
+    if (selector) {
+      await axios
+        .post(`/product/${id}`, { nome, valor })
+        .then(() => {
+          toast.success('Editado com sucesso !');
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          // eslint-disable-next-line no-useless-return
+          return;
+        });
+    } else {
+      if (nome === '') {
+        toast.error('O campo nome é obragitorio');
+        return;
+      }
+
+      await axios
+        .post('/product/new', { nome, valor })
+        .then(() => {
+          toast.success('Salvo com sucesso !');
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+          // eslint-disable-next-line no-useless-return
+          return;
+        });
     }
 
+    listProducts();
+    clear();
+  };
+
+  const deleteProduct = async (id) => {
     await axios
-      .post('/product/new', { nome, valor })
+      .delete(`/product/${id}`)
       .then(() => {
-        toast.success('Salvo com sucesso !');
+        toast.success('Excluído com sucesso !');
       })
       .catch((error) => {
         toast.error(error.response.data.message);
@@ -46,7 +94,9 @@ export default function Product() {
       });
 
     listProducts();
+    clear();
   };
+
   return (
     <>
       <NavBar />
@@ -86,16 +136,16 @@ export default function Product() {
                 </tr>
               </thead>
               <tbody>
-                {products.map((p) => (
+                {products.map((p, index) => (
                   // eslint-disable-next-line no-underscore-dangle
                   <tr key={p._id}>
                     <td>{p.nome}</td>
                     <td>{p.valor}</td>
                     <td>
-                      <CiEdit className="icon-edit" size={23} />
+                      <CiEdit className="icon-edit" size={23} onClick={() => edit(index)} />
                     </td>
                     <td>
-                      <TiDeleteOutline className="icon-delete" size={23} />
+                      <TiDeleteOutline className="icon-delete" size={23} onClick={() => deleteProduct(p._id)} />
                     </td>
                   </tr>
                 ))}

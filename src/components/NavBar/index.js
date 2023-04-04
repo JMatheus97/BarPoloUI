@@ -20,7 +20,7 @@ function BasicExample() {
           <Nav className="me-auto">
             <NavDropdown title="Cadastro" id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to="/product">
-                Cadastro
+                Produto
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/stock">
                 Estoque
