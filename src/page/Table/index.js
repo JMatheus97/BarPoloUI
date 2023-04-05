@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-useless-return */
 import React, { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
@@ -20,6 +21,8 @@ export default function Tables() {
   const [customerQuantity, setCustomerQuantity] = useState(0);
   const [status, setStatus] = useState('');
   const [tables, setTables] = useState([]);
+  const [selector, setSelector] = useState(false);
+  const [id, setId] = useState('');
 
   const listTables = async () => {
     const resultTables = await getTables();
@@ -30,28 +33,67 @@ export default function Tables() {
     listTables();
   }, []);
 
+  const clear = () => {
+    setTableNumber(0);
+    setCustomerQuantity(0);
+    document.getElementById('status').value = '';
+  };
+
+  const edit = async (index) => {
+    const table = { ...tables };
+
+    if (table.length === 0) return;
+    setSelector(true);
+    setId(table[index]._id);
+    setTableNumber(table[index].tableNumber);
+    setCustomerQuantity(table[index].customerQuantity);
+    setStatus(table[index].status);
+    document.getElementById('status').value = table[index].status;
+  };
+
   const save = async () => {
-    if (!Number.isInteger(tableNumber)) {
-      toast.error('O campo numero de mesa tem ser maior do 0 e precisa ser numero !');
-      return;
-    }
+    if (selector) {
+      await axios
+        .post(`/table/${id}`, { tableNumber, customerQuantity, status })
+        .then(() => toast.success('Editada com sucesso !'))
+        .catch((error) => error.response.data.message);
 
-    if (!Number.isInteger(customerQuantity)) {
-      toast.error('O campo numero de mesa tem ser maior do 0 e precisa ser numero !');
-      return;
-    }
+      listTables();
+      clear();
+    } else {
+      if (!Number.isInteger(tableNumber)) {
+        toast.error('O campo numero de mesa tem ser maior do 0 e precisa ser numero !');
+        return;
+      }
 
-    if (status === '') {
-      toast.error('O status é obrigatório !');
-      return;
-    }
+      if (!Number.isInteger(customerQuantity)) {
+        toast.error('O campo numero de mesa tem ser maior do 0 e precisa ser numero !');
+        return;
+      }
 
+      if (status === '') {
+        toast.error('O status é obrigatório !');
+        return;
+      }
+
+      await axios
+        .post('/table/new', { tableNumber, customerQuantity, status })
+        .then(() => toast.success('Salvo com sucesso !'))
+        .catch((error) => error.response.data.message);
+
+      listTables();
+      clear();
+    }
+  };
+
+  const deleteTable = async () => {
     await axios
-      .post('/table/new', { tableNumber, customerQuantity, status })
-      .then(() => toast.success('Salvo com sucesso !'))
+      .delete(`/table/${id}`)
+      .then(() => toast.success('Excluido com sucesso !'))
       .catch((error) => error.response.data.message);
 
     listTables();
+    clear();
   };
 
   return (
@@ -74,7 +116,7 @@ export default function Tables() {
               </Form.Group>
               <Form.Group as={Col} md="3" controlId="type">
                 <Form.Label>Status</Form.Label>
-                <Form.Select onChange={(e) => setStatus(e.target.value)}>
+                <Form.Select onChange={(e) => setStatus(e.target.value)} id="status">
                   <option>...</option>
                   <option value="Dísponivel">Dísponivel</option>
                   <option value="Ocupado">Ocupado</option>
@@ -102,17 +144,17 @@ export default function Tables() {
                 </tr>
               </thead>
               <tbody>
-                {tables.map((p) => (
+                {tables.map((p, index) => (
                   // eslint-disable-next-line no-underscore-dangle
                   <tr key={p._id}>
                     <td>{p.tableNumber}</td>
                     <td>{p.customerQuantity}</td>
                     <td>{p.status}</td>
                     <td>
-                      <CiEdit className="icon-edit" size={23} />
+                      <CiEdit className="icon-edit" size={23} onClick={() => edit(index)} />
                     </td>
                     <td>
-                      <TiDeleteOutline className="icon-delete" size={23} />
+                      <TiDeleteOutline className="icon-delete" size={23} onClick={() => deleteTable(p._id)} />
                     </td>
                   </tr>
                 ))}
