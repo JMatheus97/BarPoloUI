@@ -28,8 +28,11 @@ function BasicExample() {
               <NavDropdown.Item as={Link} to="/table">
                 Mesa
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/mesa">
+              <NavDropdown.Item as={Link} to="/employeer">
                 Funcionário
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/store">
+                Store
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
