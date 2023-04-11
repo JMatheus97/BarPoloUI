@@ -9,6 +9,7 @@ import Comandas from '../page/Commands';
 import Login from '../page/Login';
 import Home from '../page/Home';
 import Product from '../page/Product';
+import Store from '../page/Store';
 
 export default function Routes() {
   return (
@@ -17,6 +18,7 @@ export default function Routes() {
       <MyRoute excat path="/product" component={Product} isClosed />
       <MyRoute exact path="/stock" component={Stock} isClosed />
       <MyRoute exact path="/table" component={Tables} isClosed />
+      <MyRoute exact path="/store" component={Store} isClosed />
       <MyRoute excat path="/" component={Home} isClosed />
       <MyRoute exact path="/comanda-mesa" component={Comandas} isClosed />
       <MyRoute path="*" component={Page404} isClosed />

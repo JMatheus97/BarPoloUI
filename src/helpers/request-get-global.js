@@ -38,3 +38,15 @@ export const getTables = async () => {
   // eslint-disable-next-line consistent-return
   return response.data;
 };
+
+export const getStores = async () => {
+  const response = await axios
+    .get('store/')
+    .then((data) => data)
+    .catch((erro) => {
+      toast.error(erro.data.message);
+    });
+  if (response === undefined) return;
+  // eslint-disable-next-line consistent-return
+  return response.data;
+};
