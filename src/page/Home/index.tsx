@@ -1,11 +1,10 @@
-import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar from '../../components/NavBar/index';
-import TableWithPerson from '../../components/TableWithPerson';
+import { NavBar } from '../../components/NavBar/index';
+import { TableWithPerson } from '../../components/TableWithPerson';
 
-export default function PageEstoque() {
+export const Home = () => {
   return (
     <>
       <NavBar />
@@ -33,4 +32,4 @@ export default function PageEstoque() {
       </Row>
     </>
   );
-}
+};

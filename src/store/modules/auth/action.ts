@@ -1,27 +1,26 @@
 import * as types from './types';
 
-export function loginRequest(payload) {
+export function loginRequest(payload?: any) {
   return {
     type: types.LOGIN_REQUEST,
     payload,
   };
 }
 
-export function loginSuccess(payload) {
+export function loginSuccess(payload?: any) {
   return {
     type: types.LOGIN_SUCCESS,
     payload,
   };
 }
 
-export function loginFailure(payload) {
+export function loginFailure() {
   return {
     type: types.LOGIN_FAILURE,
-    payload,
   };
 }
 
-export function checkUserView(payload) {
+export function checkUserView(payload: any) {
   return {
     type: types.CHECK_USER_VIEW,
     payload,

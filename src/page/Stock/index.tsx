@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
@@ -10,34 +10,46 @@ import { CiEdit } from 'react-icons/ci';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { toast } from 'react-toastify';
 import { isNumber } from 'lodash';
-import NavBar from '../../components/NavBar';
+import { NavBar } from '../../components/NavBar';
 import { getProducts, getStocks } from '../../helpers/request-get-global';
 import { selectProcuts } from './module';
 import axios from '../../services/axios';
-import './styles.css';
 
+import './styles.css';
+import { IProduct } from '../Product';
 const moment = require('moment'); // eslint-disable
 
-export default function Stock() {
-  const [code, setCode] = useState('');
-  const [amount, setAmount] = useState(0);
-  const [type, setType] = useState('');
-  const [unitOfMeasurement, setUnitOfMeasurement] = useState('');
-  const [batch, setBatch] = useState('');
-  const [validity, setValidity] = useState('');
-  const [product, setProduct] = useState('');
-  const [products, setProducts] = useState([]);
-  const [stocks, setStocks] = useState([]);
-  const [id, setId] = useState('');
-  const [selector, setSelector] = useState(false);
+export type IStock = {
+  _id: string;
+  code: string;
+  amount: number;
+  type: string;
+  unitOfMeasurement: string;
+  batch: string;
+  validity: string;
+  product: IProduct;
+};
+
+export const Stock = () => {
+  const [code, setCode] = useState<string>('');
+  const [amount, setAmount] = useState<number>(0);
+  const [type, setType] = useState<string>('');
+  const [unitOfMeasurement, setUnitOfMeasurement] = useState<string>('');
+  const [batch, setBatch] = useState<string>('');
+  const [validity, setValidity] = useState<Date | string>('');
+  const [product, setProduct] = useState<IProduct | string>();
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [stocks, setStocks] = useState<IStock[]>([]);
+  const [id, setId] = useState<string>('');
+  const [selector, setSelector] = useState<boolean>(false);
 
   const listProducts = async () => {
-    const resultProducts = await getProducts();
+    const resultProducts: IProduct[] = await getProducts();
     setProducts(resultProducts);
   };
 
   const listStocks = async () => {
-    const resultStocks = await getStocks();
+    const resultStocks: IStock[] = await getStocks();
     setStocks(resultStocks);
   };
 
@@ -46,7 +58,7 @@ export default function Stock() {
     listStocks();
   }, []);
 
-  const hundleProducts = async (e) => {
+  const hundleProducts = async (e: ChangeEvent<HTMLSelectElement>) => {
     const productsSelect = await selectProcuts(e, products);
 
     if (productsSelect !== null) {
@@ -54,7 +66,7 @@ export default function Stock() {
     }
   };
 
-  const edit = (index) => {
+  const edit = (index: number) => {
     const stock = { ...stocks };
     setSelector(true);
     setId(stock[index]._id);
@@ -65,10 +77,26 @@ export default function Stock() {
     setUnitOfMeasurement(stock[index].unitOfMeasurement);
     setBatch(stock[index].batch);
     setValidity(moment(stock[index].validity).format('YYYY-MM-DD'));
-    document.getElementById('products').value = stock[index].product.nome;
-    document.getElementById('unitOfMeasurement').value = stock[index].unitOfMeasurement;
-    document.getElementById('type').value = stock[index].type;
-    document.getElementById('validity').value = moment(stock[index].validity).format('YYYY-MM-DD');
+    const productsQuery = document.querySelector<HTMLInputElement>('#products');
+    const unitOfMeasurementQuery = document.querySelector<HTMLInputElement>('#unitOfMeasurement');
+    const typeQuery = document.querySelector<HTMLInputElement>('#type');
+    const validityQuery = document.querySelector<HTMLInputElement>('#validity');
+
+    if (productsQuery) {
+      productsQuery.value = stock[index]?.product?.nome ?? '';
+    }
+
+    if (unitOfMeasurementQuery) {
+      unitOfMeasurementQuery.value = stock[index]?.unitOfMeasurement ?? '';
+    }
+
+    if (typeQuery) {
+      typeQuery.value = stock[index]?.type ?? '';
+    }
+
+    if (validityQuery) {
+      validityQuery.value = moment(stock[index]?.validity).format('YYYY-MM-DD') ?? '';
+    }
   };
 
   const clear = () => {
@@ -81,29 +109,57 @@ export default function Stock() {
     setValidity(new Date());
     setType('');
     setBatch('');
-    document.getElementById('products').value = '...';
-    document.getElementById('unitOfMeasurement').value = '...';
-    document.getElementById('type').value = '...';
+    const productsQuery = document.querySelector<HTMLInputElement>('#products');
+    const unitOfMeasurementQuery = document.querySelector<HTMLInputElement>('#unitOfMeasurement');
+    const typeQuery = document.querySelector<HTMLInputElement>('#type');
+    const validityQuery = document.querySelector<HTMLInputElement>('#validity');
+
+    if (productsQuery) {
+      productsQuery.value = '';
+    }
+
+    if (unitOfMeasurementQuery) {
+      unitOfMeasurementQuery.value = '';
+    }
+
+    if (typeQuery) {
+      typeQuery.value = '';
+    }
+
+    if (validityQuery) {
+      validityQuery.value = '';
+    }
   };
 
   const save = async () => {
     if (selector) {
-      await axios
-        .post(`/stock/${id}`, { code, product: product._id, unitOfMeasurement, amount, validity, type, batch })
-        .then(() => toast.success('Editado com sucesso !'))
-        .catch((error) => {
-          toast.error(error.response.data.message);
-        });
-
-      clear();
-      listStocks();
+      console.log({ code, unitOfMeasurement, amount, validity, type, batch });
+      if (product instanceof Object && '_id' in product) {
+        await axios
+          .post(`/stock/${id}`, { code, product: product, unitOfMeasurement, amount, validity, type, batch })
+          .then(() => toast.success('Editado com sucesso !'))
+          .catch((error) => {
+            toast.error(error.response.data.message);
+          });
+        clear();
+        listStocks();
+      } else {
+        await axios
+          .post(`/stock/${id}`, { code, unitOfMeasurement, amount, validity, type, batch })
+          .then(() => toast.success('Editado com sucesso !'))
+          .catch((error) => {
+            toast.error(error.response.data.message);
+          });
+        clear();
+        listStocks();
+      }
     } else {
       if (code === '') {
         toast.error('O código do produto deve ser informado !');
         return;
       }
 
-      if (product === '') {
+      if (product === undefined) {
         toast.error('O produto deve ser informado !');
         return;
       }
@@ -123,19 +179,21 @@ export default function Stock() {
         return;
       }
 
-      await axios
-        .post('/stock/new', { code, product: product._id, unitOfMeasurement, amount, validity, type, batch })
-        .then(() => toast.success('Salvo com sucesso !'))
-        .catch((error) => {
-          toast.error(error.response.data.message);
-        });
+      if (product instanceof Object && '_id' in product) {
+        await axios
+          .post('/stock/new', { code, product: product._id, unitOfMeasurement, amount, validity, type, batch })
+          .then(() => toast.success('Salvo com sucesso !'))
+          .catch((error) => {
+            toast.error(error.response.data.message);
+          });
+      }
 
       clear();
       listStocks();
     }
   };
 
-  const deleteStock = async (id) => {
+  const deleteStock = async (id: string) => {
     await axios
       .delete(`/stock/${id}`)
       .then(() => toast.success('Excluído com sucesso !'))
@@ -156,7 +214,7 @@ export default function Stock() {
             <Row className="m-3">
               <Form.Group as={Col} md="3" controlId="code">
                 <Form.Label>Código</Form.Label>
-                <Form.Control type="text" iplaceholder="Nome do Produto" value={code} onChange={(e) => setCode(e.target.value)} />
+                <Form.Control type="text" placeholder="Nome do Produto" value={code} onChange={(e) => setCode(e.target.value)} />
               </Form.Group>
               <Form.Group as={Col} md="4" controlId="products">
                 <Form.Label>Produtos</Form.Label>
@@ -184,7 +242,7 @@ export default function Stock() {
             <Row className="m-3">
               <Form.Group as={Col} md="3" controlId="validity">
                 <Form.Label>Validade</Form.Label>
-                <Form.Control type="date" placeholder="Nome do Produto" value={validity} onChange={(e) => setValidity(e.target.value)} />
+                <Form.Control type="date" placeholder="Nome do Produto" value={validity.toString()} onChange={(e) => setValidity(e.target.value)} />
               </Form.Group>
               <Form.Group as={Col} md="3" controlId="type">
                 <Form.Label>Tipo</Form.Label>
@@ -249,4 +307,4 @@ export default function Stock() {
       </Card>
     </>
   );
-}
+};

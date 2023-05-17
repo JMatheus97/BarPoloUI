@@ -8,16 +8,33 @@ import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import { CiEdit } from 'react-icons/ci';
 import { TiDeleteOutline } from 'react-icons/ti';
-import NavBar from '../../components/NavBar';
+import { NavBar } from '../../components/NavBar';
 import { getStores } from '../../helpers/request-get-global';
 
 import './styles.css';
 
-export default function Store() {
-  const [stores, setStores] = useState([]);
+type IAdress = {
+  cep: string;
+  street: string;
+  numberStore?: number;
+  city: string;
+  district: string;
+  uf: string;
+  complement: string;
+};
+
+type IStore = {
+  _id: string;
+  name: string;
+  cnpj: string;
+  adress: IAdress;
+};
+
+export const Store = () => {
+  const [stores, setStores] = useState<IStore[]>([]);
 
   const listStores = async () => {
-    const resultStores = await getStores();
+    const resultStores: IStore[] = await getStores();
     setStores(resultStores);
   };
 
@@ -116,4 +133,4 @@ export default function Store() {
       </Card>
     </>
   );
-}
+};

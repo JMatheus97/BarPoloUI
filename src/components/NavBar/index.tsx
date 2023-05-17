@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as actions from '../../store/modules/auth/action';
 
-function BasicExample() {
+export const NavBar = () => {
   const dispatch = useDispatch();
   const logout = () => {
     dispatch(actions.loginFailure());
@@ -32,7 +32,7 @@ function BasicExample() {
                 Funcionário
               </NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/store">
-                Store
+                Loja
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
@@ -45,6 +45,4 @@ function BasicExample() {
       </Container>
     </Navbar>
   );
-}
-
-export default BasicExample;
+};

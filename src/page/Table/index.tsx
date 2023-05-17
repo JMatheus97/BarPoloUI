@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-useless-return */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
@@ -10,22 +10,29 @@ import Table from 'react-bootstrap/Table';
 import { CiEdit } from 'react-icons/ci';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { toast } from 'react-toastify';
-import NavBar from '../../components/NavBar/index';
+import { NavBar } from '../../components/NavBar/index';
 import { getTables } from '../../helpers/request-get-global';
 
 import './styles.css';
 import axios from '../../services/axios';
 
-export default function Tables() {
-  const [tableNumber, setTableNumber] = useState(0);
-  const [customerQuantity, setCustomerQuantity] = useState(0);
-  const [status, setStatus] = useState('');
-  const [tables, setTables] = useState([]);
-  const [selector, setSelector] = useState(false);
-  const [id, setId] = useState('');
+export type ITable = {
+  _id: string;
+  tableNumber: number;
+  customerQuantity: number;
+  status: string;
+};
+
+export const Tables = () => {
+  const [tableNumber, setTableNumber] = useState<number>(0);
+  const [customerQuantity, setCustomerQuantity] = useState<number>(0);
+  const [status, setStatus] = useState<string>('');
+  const [tables, setTables] = useState<ITable[]>([]);
+  const [selector, setSelector] = useState<boolean>(false);
+  const [id, setId] = useState<string>('');
 
   const listTables = async () => {
-    const resultTables = await getTables();
+    const resultTables: ITable[] = await getTables();
     setTables(resultTables);
   };
 
@@ -36,19 +43,24 @@ export default function Tables() {
   const clear = () => {
     setTableNumber(0);
     setCustomerQuantity(0);
-    document.getElementById('status').value = '';
+    const statusQuery = document.querySelector<HTMLInputElement>('#status');
+    if (statusQuery) {
+      statusQuery.value = '';
+    }
   };
 
-  const edit = async (index) => {
+  const edit = async (index: number) => {
     const table = { ...tables };
 
-    if (table.length === 0) return;
     setSelector(true);
     setId(table[index]._id);
     setTableNumber(table[index].tableNumber);
     setCustomerQuantity(table[index].customerQuantity);
     setStatus(table[index].status);
-    document.getElementById('status').value = table[index].status;
+    const statusQuery = document.querySelector<HTMLInputElement>('#status');
+    if (statusQuery) {
+      statusQuery.value = table[index].status ?? '';
+    }
   };
 
   const save = async () => {
@@ -86,7 +98,7 @@ export default function Tables() {
     }
   };
 
-  const deleteTable = async () => {
+  const deleteTable = async (id: string) => {
     await axios
       .delete(`/table/${id}`)
       .then(() => toast.success('Excluido com sucesso !'))
@@ -165,4 +177,4 @@ export default function Tables() {
       </Card>
     </>
   );
-}
+};

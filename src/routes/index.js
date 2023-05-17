@@ -1,15 +1,14 @@
-import React from 'react';
 import { Switch } from 'react-router-dom';
 import MyRoute from './Myroute';
 
 import Page404 from '../page/Page404';
-import Stock from '../page/Stock';
-import Tables from '../page/Table';
+import { Stock } from '../page/Stock';
+import { Tables } from '../page/Table';
 import Comandas from '../page/Commands';
-import Login from '../page/Login';
-import Home from '../page/Home';
-import Product from '../page/Product';
-import Store from '../page/Store';
+import { Login } from '../page/Login';
+import { Home } from '../page/Home';
+import { Product } from '../page/Product';
+import { Store } from '../page/Store';
 
 export default function Routes() {
   return (

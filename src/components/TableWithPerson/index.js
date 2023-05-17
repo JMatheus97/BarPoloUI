@@ -1,9 +1,10 @@
+/* eslint-disable react/jsx-key */
 import React, { useEffect, useState } from 'react';
 import { getTables } from '../../helpers/request-get-global';
 
 import './styles.css';
 
-export default function TableWithPerson() {
+export const TableWithPerson = () => {
   const [tableAvaiable, setTableAvaiable] = useState([]);
 
   const listTables = async () => {
@@ -15,7 +16,7 @@ export default function TableWithPerson() {
     listTables();
   }, []);
   return (
-    <>
+    <div>
       {tableAvaiable.map((ta) => (
         <div className="card-table">
           <img className="img-table" src="https://img.icons8.com/ios-filled/50/000000/tablecloth.png" alt="icon-table" />
@@ -31,6 +32,6 @@ export default function TableWithPerson() {
           </p>
         </div>
       ))}
-    </>
+    </div>
   );
-}
+};

@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
@@ -9,21 +9,26 @@ import Table from 'react-bootstrap/Table';
 import { toast } from 'react-toastify';
 import { CiEdit } from 'react-icons/ci';
 import { TiDeleteOutline } from 'react-icons/ti';
-import NavBar from '../../components/NavBar';
+import { NavBar } from '../../components/NavBar';
 import { getProducts } from '../../helpers/request-get-global';
 import axios from '../../services/axios';
-
 import './styles.css';
 
-export default function Product() {
-  const [nome, setNome] = useState('');
-  const [valor, setValor] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [selector, setSelector] = useState(false);
-  const [id, setId] = useState('');
+export type IProduct = {
+  _id: string;
+  nome: string;
+  valor: number;
+};
+
+export const Product = () => {
+  const [nome, setNome] = useState<string>('');
+  const [valor, setValor] = useState<number>(0);
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [selector, setSelector] = useState<boolean>(false);
+  const [id, setId] = useState<string>('');
 
   const listProducts = async () => {
-    const resultProducts = await getProducts();
+    const resultProducts: IProduct[] = await getProducts();
     setProducts(resultProducts);
   };
 
@@ -36,7 +41,7 @@ export default function Product() {
     setValor(0);
   };
 
-  const edit = (index) => {
+  const edit = (index: number) => {
     const product = { ...products };
 
     if (product.length === 0) return;
@@ -81,7 +86,7 @@ export default function Product() {
     clear();
   };
 
-  const deleteProduct = async (id) => {
+  const deleteProduct = async (id: string) => {
     await axios
       .delete(`/product/${id}`)
       .then(() => {
@@ -156,4 +161,4 @@ export default function Product() {
       </Card>
     </>
   );
-}
+};

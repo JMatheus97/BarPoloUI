@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { toast } from 'react-toastify';
-import { get } from 'lodash';
+import * as _ from 'lodash';
 import { useDispatch } from 'react-redux';
 import { Container, Form } from './styled';
 import * as actions from '../../store/modules/auth/action';
 
-export default function Login(props) {
+export const Login = (props: any) => {
   const dispatch = useDispatch();
 
-  const prevPath = get(props, 'location.state.prevePath', '/app');
+  const prevPath = _.get(props, 'location.state.prevePath', '/app');
 
-  const [userName, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [userName, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
-  async function hundleSubmit(e) {
+  async function hundleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     let formErrors = false;
@@ -48,4 +48,4 @@ export default function Login(props) {
       </Form>
     </Container>
   );
-}
+};
